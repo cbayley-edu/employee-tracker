@@ -63,4 +63,7 @@ VALUES ("Tom", "Allen", 3, 6);              -- id 7
 INSERT INTO `employee_tracker_db`.`employee` (`first_name`, `last_name`, `role_id`, `manager_id`)
 VALUES ("Christian", "Eckenrode", 4, 2);    -- id 8
 
+INSERT INTO `employee_tracker_db`.`employee` (`first_name`, `last_name`, `role_id`, `manager_id`, `active`)
+VALUES ("Sally", "Henderson", 8, 4, false); -- id 9
+
 
