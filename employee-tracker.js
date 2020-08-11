@@ -1,4 +1,15 @@
 
+const mySql = require("mysql");
+const inquirer = require("inquirer");
+
+const conn = mySql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "yourRootPassword#1!",
+    database: "top_songs_db"
+});
+
 
 
 

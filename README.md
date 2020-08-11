@@ -1,137 +1,96 @@
-# Unit 12 MySQL Homework: Employee Tracker
+# Employee Tracker 1.0
 
-Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. Often these interfaces are known as **C**ontent **M**anagement **S**ystems. In this homework assignment, your challenge is to architect and build a solution for managing a company's employees using node, inquirer, and MySQL.
+### Unit 12 MySQL Homework: Employee Tracker
 
-## Instructions
+## Description
 
-Design the following database schema containing three tables:
+asdf
 
-![Database Schema](assets/schema.png)
+Access the deployed Heroku app here: 
 
-* **department**:
-
-  * **id** - INT PRIMARY KEY
-  * **name** - VARCHAR(30) to hold department name
-
-* **role**:
-
-  * **id** - INT PRIMARY KEY
-  * **title** -  VARCHAR(30) to hold role title
-  * **salary** -  DECIMAL to hold role salary
-  * **department_id** -  INT to hold reference to department role belongs to
-
-* **employee**:
-
-  * **id** - INT PRIMARY KEY
-  * **first_name** - VARCHAR(30) to hold employee first name
-  * **last_name** - VARCHAR(30) to hold employee last name
-  * **role_id** - INT to hold reference to role employee has
-  * **manager_id** - INT to hold reference to another employee that manager of the current employee. This field may be null if the employee has no manager
-  
-Build a command-line application that at a minimum allows the user to:
-
-  * Add departments, roles, employees
-
-  * View departments, roles, employees
-
-  * Update employee roles
-
-Bonus points if you're able to:
-
-  * Update employee managers
-
-  * View employees by manager
-
-  * Delete departments, roles, and employees
-
-  * View the total utilized budget of a department -- ie the combined salaries of all employees in that department
-
-We can frame this challenge as follows:
-
-```
-As a business owner
-I want to be able to view and manage the departments, roles, and employees in my company
-So that I can organize and plan my business
-```
-
-How do you deliver this? Here are some guidelines:
-
-* Use the [MySQL](https://www.npmjs.com/package/mysql) NPM package to connect to your MySQL database and perform queries.
-
-* Use [InquirerJs](https://www.npmjs.com/package/inquirer/v/0.2.3) NPM package to interact with the user via the command-line.
-
-* Use [console.table](https://www.npmjs.com/package/console.table) to print MySQL rows to the console. There is a built-in version of `console.table`, but the NPM package formats the data a little better for our purposes.
-
-* You may wish to have a separate file containing functions for performing specific SQL queries you'll need to use. Could a constructor function or a class be helpful for organizing these?
-
-* You will need to perform a variety of SQL JOINS to complete this assignment, and it's recommended you review the week's activities if you need a refresher on this.
-
-![Employee Tracker](assets/employee-tracker.gif)
-
-### Hints
-
-* You may wish to include a `seed.sql` file to pre-populate your database. This will make development of individual features much easier.
-
-* Focus on getting the basic functionality completed before working on more advanced features.
-
-* Review the week's activities for a refresher on MySQL.
-
-* Check out [SQL Bolt](https://sqlbolt.com/) for some extra MySQL help.
-
-## Minimum Requirements
-
-* Functional application.
-
-* GitHub repository with a unique name and a README describing the project.
-
-* The command-line application should allow users to:
-
-  * Add departments, roles, employees
-
-  * View departments, roles, employees
-
-  * Update employee roles
-
-## Bonus
-
-* The command-line application should allow users to:
-
-  * Update employee managers
-
-  * View employees by manager
-
-  * Delete departments, roles, and employees
-
-  * View the total utilized budget of a department -- ie the combined salaries of all employees in that department
-
-## Commit Early and Often
-
-One of the most important skills to master as a web developer is version control. Building the habit of committing via Git is important for two reasons:
-
-* Your commit history is a signal to employers that you are actively working on projects and learning new skills.
-
-* Your commit history allows you to revert your codebase in the event that you need to return to a previous state.
-
-Follow these guidelines for committing:
-
-* Make single-purpose commits for related changes to ensure a clean, manageable history. If you are fixing two issues, make two commits.
-
-* Write descriptive, meaningful commit messages so that you and anyone else looking at your repository can easily understand its history.
-
-* Don't commit half-done work, for the sake of your collaborators (and your future self!).
-
-* Test your application before you commit to ensure functionality at every step in the development process.
-
-We would like you to have well over 200 commits by graduation, so commit early and often!
+Access the git repo here: 
 
 
-## Submission on BCS
+## Table of Contents 
 
-You are required to submit the following:
+* [Installation](#installation)
+* [Usage](#usage)
+* [License](#license)
+* [Questions](#questions)
 
-* The URL of the GitHub repository
 
-* A video demonstrating the entirety of the app's functionality 
+## Installation 
 
-- - -
-© 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
+[
+  You can immediately access the app using the link above but you can also run the application locally.
+
+  Using GitHub, clone or fork the repository. You'll need to get the repo pulled to your local repository. Once you have the repo locally, be sure to run npm install from your terminal to install inquirer and all other dependencies for the application. 
+
+  ![npm install](./public/assets/imgs/npm-install.png) 
+
+  If you plan to push the repo back to your GitHub repo, be sure to add a .gitignore file to your root folder and ignore node_modules and .DS_Store/ . 
+]
+
+## Usage
+
+[
+  #### You only need to follow these first steps if you are running the application locally.
+
+  Start the program by typing node server.js in your terminal. You will be prompted that port 3060 is listening.
+
+  ![start program](./public/assets/imgs/start-program.png)
+
+  Open your browser and goto localhost:3060 .
+
+  ![browser](./public/assets/imgs/browser.png)
+
+
+  #### The remaining steps refer to the app regardless of how you access it (locally or through Heroku)
+
+  You will be presented with the Note Taker start page. Click Get Started to use Note Taker.
+
+  ![get started](./public/assets/imgs/get-started.png)
+
+  To enter a new note, type a note title and note text.
+
+  ![enter note](./public/assets/imgs/enter-note.png)
+
+  To save your note, click on the Save button.
+
+  ![save note](./public/assets/imgs/save-note.png)
+
+  As you save notes the will appear on the left. 
+
+  ![view notes](./public/assets/imgs/view-notes.png)
+
+  Click on any note to view it.
+
+  ![view note](./public/assets/imgs/view-note.png)
+
+  While in view mode, if you wish to add a new note, click on the pencil icon in the upper right-hand corner.
+
+  ![new note](./public/assets/imgs/new-note.png)
+
+  Click on the trashcan to delete an existing note.
+
+  ![delete note](./public/assets/imgs/delete-note.png)
+
+  The page will reload and the note will be gone.
+
+  ![delete refresh](./public/assets/imgs/delete-refresh.png)
+]
+
+## License 
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This project is covered by the above license(s). Click on the badge for more information.
+
+
+## Questions 
+
+GitHub username: cbayley-edu
+GitHub profile link: https://github.com/cbayley-edu
+
+Please email me at christinabayley@comcast.net with any questions you have or any issues you come across.
+
