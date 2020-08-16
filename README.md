@@ -6,7 +6,7 @@
 
 Use Employee Tracker to store your empployee information to ensure accurate data and easy payroll processing.
 
-Access the git repo here: https://github.com/cbayley-edu/note-taker
+Access the git repo here: https://github.com/cbayley-edu/employee-tracker
 
 How-to video: https://drive.google.com/file/d/1-vgqUyeOhCZgUyEftU3mpJajiOuTs7m4/view
 
