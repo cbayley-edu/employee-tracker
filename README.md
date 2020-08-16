@@ -48,7 +48,7 @@ The user-friendly interface allows you to view records,
 
 ![view](./assets/imgs/view.png)
 
-update records, 
+update/create records view prompts and validation, 
 
 ![update](./assets/imgs/update.png)
 
