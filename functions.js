@@ -1,7 +1,9 @@
 const inquirer = require("inquirer");
-// -------------------------------------------------------------------------------------------------------------------- //
-// ---------------------------------------------------COMMON QUERIES--------------------------------------------------- //
-// -------------------------------------------------------------------------------------------------------------------- //
+
+// -------------------------------------------------------------------------------------------------------------- //
+// ------------------------------------------------COMMON QUERIES------------------------------------------------ //
+// -------------------------------------------------------------------------------------------------------------- //
+// these are used in various functions below to alleviate repetative queries in the code
 const qry_standardEmpList = `SELECT  e.id ID, 
                               CASE
                                  WHEN e.active THEN "Yes"
@@ -34,15 +36,21 @@ const qry_getManagers = `SELECT DISTINCT e.manager_id id, CONCAT(m.first_name, "
                          WHERE e.manager_id IS NOT NULL
                          ORDER BY name;`
 
-
-
 // --------------------------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------FUNCTIONS--------------------------------------------------- //
 // --------------------------------------------------------------------------------------------------------------- //
-// function to validate questions that can't be blank
+// function to validate inquirer prompts (questions) that can't be blank
 const cannotBeBlank = async(input) => {
     if (input === "") {
        return "You must supply a value";
+    }
+    return true;
+ };
+
+ // function to validate inquirer prompts (questions) that must be numeric and not blank
+const mustBeNumeric = async(input) => {
+    if (parseInt(input) != input) {
+       return "You must supply a numeric value";
     }
     return true;
  };
@@ -179,7 +187,7 @@ const cannotBeBlank = async(input) => {
                    roleArray.push(roleRes[i].title);
                 }
                 return roleArray;
-             }
+            }
           },
           {
              name: "manager",
@@ -190,6 +198,7 @@ const cannotBeBlank = async(input) => {
                 for (var i = 0; i < mgrRes.length; i++) {
                    mgrArray.push(mgrRes[i].name);
                 }
+                mgrArray.push("No Manager");
                 return mgrArray;
              }
           }])
@@ -199,17 +208,29 @@ const cannotBeBlank = async(input) => {
              for (var i = 0; i < roleRes.length; i++) {
                 if (roleRes[i].title === answer.role) {
                    chosenRole = roleRes[i];
-                   roleId = chosenRole.id;
                 }
              }
              var chosenMgr;
              for (var i = 0; i < mgrRes.length; i++) {
                 if (mgrRes[i].name === answer.manager) {
                    chosenMgr = mgrRes[i];
-                   mgrId = chosenMgr.id;
-                }
-             }
-             conn.query(
+                } 
+             } 
+             if (typeof chosenMgr === "undefined") {
+                conn.query(
+                    "INSERT INTO employee SET ?",
+                    {
+                       first_name: answer.f_name,
+                       last_name: answer.l_name,
+                       role_id: chosenRole.id
+                    },
+                    function(err) {
+                       if (err) throw err;
+                       console.log("Employee created successfully!");
+                       start();
+                    });
+             } else {
+                conn.query(
                 "INSERT INTO employee SET ?",
                 {
                    first_name: answer.f_name,
@@ -221,7 +242,8 @@ const cannotBeBlank = async(input) => {
                    if (err) throw err;
                    console.log("Employee created successfully!");
                    start();
-             });
+                });
+              }
           });
        });
     });
@@ -420,7 +442,8 @@ const cannotBeBlank = async(input) => {
                                   REVERSE(CONCAT(SUBSTR(REVERSE(CAST(ROUND(r.salary, 0) as CHAR)), 1, 3),",",SUBSTR(REVERSE(CAST(ROUND(r.salary, 0) as CHAR)), 4), " $")) 
                             END Salary
                 FROM	role r
-                LEFT JOIN department d on d.id = r.department_id;`, function(err, results) {
+                            LEFT JOIN department d on d.id = r.department_id
+                ORDER BY r.title;`, function(err, results) {
        if (err) throw err;
        console.table(results);
        start();
@@ -429,31 +452,101 @@ const cannotBeBlank = async(input) => {
  
  // 12- Add Role
  function addRole(conn, start) {
- 
- 
-    conn.query(`SELECT * FROM employee;`, function(err, results) {
-       if (err) throw err;
-       console.table(results);
-       start();
+    conn.query(`${qry_getDepartments};`, function(err, results) {
+        if (err) throw err;
+        inquirer
+        .prompt([
+        {
+            name: "title",
+            type: "input",
+            message: "What is the role/title?",
+            validate: cannotBeBlank
+        },
+        {
+            name: "salary",
+            type: "input",
+            message: "What is the salary?",
+            validate: mustBeNumeric
+        },
+        {
+            name: "department",
+            type: "list",
+            message: "Select the department.",
+            choices: function() {
+                var deptArray = [];
+                for (var i = 0; i < results.length; i++) {
+                    deptArray.push(results[i].name);
+                }
+                return deptArray;
+            }
+        }])
+        .then(function(answer) {
+        // when finished prompting, insert a new role into the db with the entered/selected info
+            var chosenDept;
+            for (var i = 0; i < results.length; i++) {
+                if (results[i].name === answer.department) {
+                    chosenDept = results[i];
+                }
+            }
+            conn.query(
+                "INSERT INTO role SET ?",
+                {
+                    title: answer.title,
+                    salary: answer.salary,
+                    department_id: chosenDept.id
+                },
+                function(err) {
+                if (err) throw err;
+                console.log("Role created successfully!");
+                start();
+            });
+        });
     });
  }
  
  // 13- Delete a Role
  function deleteRole(conn, start) {
- 
- 
-    conn.query(`SELECT * FROM employee;`, function(err, results) {
-       if (err) throw err;
-       console.table(results);
-       start();
+    conn.query(`${qry_getRoles};`, function(err, results) {
+        if (err) throw err;
+    inquirer
+    .prompt(
+        {
+            name: "role",
+            type: "list",
+            message: "Select the Role to Delete (this will remove the role for existing employees as well).",
+            choices: function() {
+            var roleArray = [];
+            for (var i = 0; i < results.length; i++) {
+                roleArray.push(results[i].title);
+            }
+            return roleArray;
+            }
+        })
+    .then(function(answer) {
+        var chosenRole;
+        for (var i = 0; i < results.length; i++) {
+            if (results[i].title === answer.role) {
+            chosenRole = results[i];
+            }
+        }
+        conn.query(`DELETE FROM role r
+                    WHERE r.id = ${chosenRole.id};`, function(err, results) {
+                if (err) throw err;
+            conn.query(`UPDATE employee e
+                    SET e.role_id = NULL
+                    WHERE e.role_id = ${chosenRole.id};`, function(err, results) {
+                    if (err) throw err;
+                    console.log("The selected Role has been deleted.");
+                    start();
+                });
+            });
+        });
     });
  }
  
  // 14- View all Departments
  function viewAllDepartments(conn, start) {
- 
- 
-    conn.query(`SELECT * FROM employee;`, function(err, results) {
+     conn.query(`SELECT * FROM department ORDER BY name;`, function(err, results) {
        if (err) throw err;
        console.table(results);
        start();
@@ -462,26 +555,90 @@ const cannotBeBlank = async(input) => {
  
  // 15- Add Department
  function addDepartment(conn, start) {
- 
- 
-    conn.query(`SELECT * FROM employee;`, function(err, results) {
-       if (err) throw err;
-       console.table(results);
-       start();
+    inquirer
+    .prompt({
+        name: "name",
+        type: "input",
+        message: "What is the new Department Name?",
+        validate: cannotBeBlank
+    })
+    .then(function(answer) {
+    // when finished prompting, insert a new department into the db with the entered info
+        conn.query(
+            "INSERT INTO department SET ?",
+            {
+                name: answer.name
+            },
+            function(err) {
+                if (err) throw err;
+                console.log("Department created successfully!");
+                start();
+        });
     });
  }
  
  // 16- Delete a Department
  function deleteDepartment(conn, start) {
+    conn.query(`${qry_getDepartments};`, function(err, results) {
+        if (err) throw err;
+    inquirer
+    .prompt(
+        {
+            name: "department",
+            type: "list",
+            message: "Select the Department to Delete (this will remove the department from existing roles as well).",
+            choices: function() {
+            var deptArray = [];
+            for (var i = 0; i < results.length; i++) {
+                deptArray.push(results[i].name);
+            }
+            return deptArray;
+            }
+        })
+    .then(function(answer) {
+        var chosenDept;
+        for (var i = 0; i < results.length; i++) {
+            if (results[i].name === answer.department) {
+                chosenDept = results[i];
+            }
+        }
+        conn.query(`DELETE FROM department d
+                        WHERE d.id = ${chosenDept.id};`, function(err, results) {
+                    if (err) throw err;
+            conn.query(`UPDATE role r
+                        SET r.department_id = NULL
+                        WHERE r.department_id = ${chosenDept.id};`, function(err, results) {
+                    if (err) throw err;
+                    console.log("The selected Department has been deleted.");
+                    start();
+                });
+            });
+        });
+    });
+ }
 
+// 17- View all Departments' Budgets
+function viewAllDepartmentsBudgets(conn, start) {
+    conn.query(`SELECT	d.name Department, 
+                        CASE
+                            WHEN r.salary < 100000 THEN 
+                                REVERSE(CONCAT(SUBSTR(REVERSE(CAST(ROUND(SUM(r.salary), 0) as CHAR)), 1, 3),",",SUBSTR(REVERSE(CAST(ROUND(SUM(r.salary), 0) as CHAR)), 4), "  $")) 
+                            WHEN r.salary >= 100000 THEN 
+                                REVERSE(CONCAT(SUBSTR(REVERSE(CAST(ROUND(SUM(r.salary), 0) as CHAR)), 1, 3),",",SUBSTR(REVERSE(CAST(ROUND(SUM(r.salary), 0) as CHAR)), 4), " $")) 
+                        END Salary,  COUNT(e.id) "Emp Count"
+                    FROM	employee e 
+                            LEFT JOIN role r on r.id = e.role_id
+                            LEFT JOIN department d on d.id = r.department_id
+                    WHERE	e.active = true
+                    GROUP BY d.name
+                    ORDER BY Salary desc;`, function(err, results) {
+       if (err) throw err;
+       console.table(results);
+       start();
+    });
+ }
 
-   conn.query(`SELECT * FROM employee;`, function(err, results) {
-      if (err) throw err;
-      console.table(results);
-      start();
-   });
-}
-
+ // export functions to call in employee-tracker.js
 module.exports = { 
                 viewAllEmployees: viewAllEmployees, 
                 viewAllActiveEmployees: viewAllActiveEmployees,
@@ -498,5 +655,6 @@ module.exports = {
                 deleteRole: deleteRole,
                 viewAllDepartments: viewAllDepartments,
                 addDepartment: addDepartment,
-                deleteDepartment: deleteDepartment
+                deleteDepartment: deleteDepartment,
+                viewAllDepartmentsBudgets: viewAllDepartmentsBudgets
             };

@@ -4,11 +4,11 @@
 
 ## Description
 
-asdf
+Use Employee Tracker to store your empployee information to ensure accurate data and easy payroll processing.
 
-Access the deployed Heroku app here: 
+Access the git repo here: https://github.com/cbayley-edu/note-taker
 
-Access the git repo here: 
+How-to video: 
 
 
 ## Table of Contents 
@@ -21,64 +21,45 @@ Access the git repo here:
 
 ## Installation 
 
-[
-  You can immediately access the app using the link above but you can also run the application locally.
+To use the application you will need to install it locally, update the connection information to use your MySQL connection, and run the schema.sql and seed.sql in MySQL.
 
-  Using GitHub, clone or fork the repository. You'll need to get the repo pulled to your local repository. Once you have the repo locally, be sure to run npm install from your terminal to install inquirer and all other dependencies for the application. 
+Using GitHub, clone or fork the repository. You'll need to get the repo pulled to your local repository. Once you have the repo locally, be sure to run npm install from your terminal to install inquirer and all other dependencies for the application. 
 
-  ![npm install](./public/assets/imgs/npm-install.png) 
+![npm install](./assets/imgs/npm-install.png) 
 
-  If you plan to push the repo back to your GitHub repo, be sure to add a .gitignore file to your root folder and ignore node_modules and .DS_Store/ . 
-]
+If you plan to push the repo back to your GitHub repo, be sure to add a .gitignore file to your root folder and ignore node_modules and .DS_Store/ . 
+
 
 ## Usage
 
-[
-  #### You only need to follow these first steps if you are running the application locally.
+Start the program by typing node employee-tracker.js in your terminal.
 
-  Start the program by typing node server.js in your terminal. You will be prompted that port 3060 is listening.
+![start program](./public/assets/imgs/start-program.png)
 
-  ![start program](./public/assets/imgs/start-program.png)
+The program will start and present you with a list of options to select from. There are currently 17 options available - use your up/down arrow keys to see more. 
 
-  Open your browser and goto localhost:3060 .
+![start page](./public/assets/imgs/start-page.png)
 
-  ![browser](./public/assets/imgs/browser.png)
+The database is comprised of Employees, Roles, and Departments. 
 
+![schema](./public/assets/imgs/schema.png)
 
-  #### The remaining steps refer to the app regardless of how you access it (locally or through Heroku)
+The user-friendly interface allows you to view records,
 
-  You will be presented with the Note Taker start page. Click Get Started to use Note Taker.
+![view](./public/assets/imgs/view.png)
 
-  ![get started](./public/assets/imgs/get-started.png)
+update records, 
 
-  To enter a new note, type a note title and note text.
+![update](./public/assets/imgs/update.png)
 
-  ![enter note](./public/assets/imgs/enter-note.png)
+and delete records. 
 
-  To save your note, click on the Save button.
+![delete](./public/assets/imgs/delete.png)
 
-  ![save note](./public/assets/imgs/save-note.png)
+You also have options to view budget data by department and exit the program.
 
-  As you save notes the will appear on the left. 
+![exit](./public/assets/imgs/exit.png)
 
-  ![view notes](./public/assets/imgs/view-notes.png)
-
-  Click on any note to view it.
-
-  ![view note](./public/assets/imgs/view-note.png)
-
-  While in view mode, if you wish to add a new note, click on the pencil icon in the upper right-hand corner.
-
-  ![new note](./public/assets/imgs/new-note.png)
-
-  Click on the trashcan to delete an existing note.
-
-  ![delete note](./public/assets/imgs/delete-note.png)
-
-  The page will reload and the note will be gone.
-
-  ![delete refresh](./public/assets/imgs/delete-refresh.png)
-]
 
 ## License 
 
