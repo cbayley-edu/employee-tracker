@@ -8,7 +8,7 @@ Use Employee Tracker to store your empployee information to ensure accurate data
 
 Access the git repo here: https://github.com/cbayley-edu/note-taker
 
-How-to video: 
+How-to video: https://drive.google.com/file/d/1-vgqUyeOhCZgUyEftU3mpJajiOuTs7m4/view
 
 
 ## Table of Contents 
@@ -34,31 +34,31 @@ If you plan to push the repo back to your GitHub repo, be sure to add a .gitigno
 
 Start the program by typing node employee-tracker.js in your terminal.
 
-![start program](./public/assets/imgs/start-program.png)
+![start program](./assets/imgs/start-program.png)
 
 The program will start and present you with a list of options to select from. There are currently 17 options available - use your up/down arrow keys to see more. 
 
-![start page](./public/assets/imgs/start-page.png)
+![start page](./assets/imgs/start-page.png)
 
 The database is comprised of Employees, Roles, and Departments. 
 
-![schema](./public/assets/imgs/schema.png)
+![schema](./assets/imgs/schema.png)
 
 The user-friendly interface allows you to view records,
 
-![view](./public/assets/imgs/view.png)
+![view](./assets/imgs/view.png)
 
 update records, 
 
-![update](./public/assets/imgs/update.png)
+![update](./assets/imgs/update.png)
 
 and delete records. 
 
-![delete](./public/assets/imgs/delete.png)
+![delete](./assets/imgs/delete.png)
 
 You also have options to view budget data by department and exit the program.
 
-![exit](./public/assets/imgs/exit.png)
+![exit](./assets/imgs/exit.png)
 
 
 ## License 
